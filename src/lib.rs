@@ -98,12 +98,7 @@ impl Context {
 
     /// Compiles a template from a path.
     pub fn compile_path(&self, path: Path) -> Result<Template, Error> {
-        // FIXME(#6164): This should use the file decoding tools when they are
-        // written. For now we'll just read the file and treat it as UTF-8file.
-        let mut path = self.template_path.join(path);
-        path.set_extension(self.template_extension.clone());
-
-        let s = match File::open(&path).read_to_end() {
+        let s = match File::open(&self.template_path.join(path)).read_to_end() {
             Ok(s) => s,
             Err(err) => { return Err(IoError(err)); }
         };
